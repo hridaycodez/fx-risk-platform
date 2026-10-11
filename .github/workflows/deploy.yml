@@ -3,6 +3,7 @@ name: Deploy FX Risk Platform
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 env:
   AWS_REGION: ap-south-1   # Mumbai — closest to India
