@@ -1,0 +1,42 @@
+{
+  "scenarios": [
+    {
+      "name": "USD_Crash",
+      "shock_percentages": {
+        "USD": -0.20
+      },
+      "description": "US Dollar depreciates 20% against base currency"
+    },
+    {
+      "name": "GBP_Brexit_Shock",
+      "shock_percentages": {
+        "GBP": -0.15
+      },
+      "description": "British Pound drops 15% (Brexit-style event)"
+    },
+    {
+      "name": "JPY_Surge",
+      "shock_percentages": {
+        "JPY": 0.25
+      },
+      "description": "Japanese Yen appreciates 25% (safe-haven rally)"
+    },
+    {
+      "name": "Global_Risk_Off",
+      "shock_percentages": {
+        "USD": -0.10,
+        "GBP": -0.12,
+        "JPY": 0.15
+      },
+      "description": "Global risk-off: USD/GBP weaken, JPY strengthens"
+    },
+    {
+      "name": "Mild_USD_Strength",
+      "shock_percentages": {
+        "USD": 0.05,
+        "GBP": -0.03
+      },
+      "description": "Mild USD strengthening with slight GBP weakness"
+    }
+  ]
+}

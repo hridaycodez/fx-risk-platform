@@ -1,0 +1,78 @@
+.ticker-bar {
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(90deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+  border-bottom: 1px solid #21262d;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.ticker-loading {
+  text-align: center;
+  color: #8b949e;
+  font-family: 'Inter', monospace;
+  font-size: 0.85rem;
+}
+
+.ticker-track {
+  display: flex;
+  animation: tickerScroll 30s linear infinite;
+  width: max-content;
+}
+
+.ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 16px;
+  white-space: nowrap;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.85rem;
+}
+
+.ticker-flag {
+  font-size: 1rem;
+}
+
+.ticker-pair {
+  color: #c9d1d9;
+  font-weight: 600;
+}
+
+.ticker-rate {
+  color: #f0f6fc;
+  font-weight: 700;
+}
+
+.ticker-change {
+  font-weight: 600;
+  font-size: 0.78rem;
+}
+
+.ticker-change.up {
+  color: #3fb950;
+}
+
+.ticker-change.down {
+  color: #f85149;
+}
+
+.ticker-divider {
+  color: #30363d;
+  margin: 0 4px;
+}
+
+@keyframes tickerScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-bar:hover .ticker-track {
+  animation-play-state: paused;
+}

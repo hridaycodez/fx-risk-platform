@@ -1,0 +1,80 @@
+version: '3.9'
+
+services:
+  # ── Python ML Engine ────────────────────────────────────
+  ml-engine:
+    build:
+      context: ./ml-engine
+      dockerfile: Dockerfile
+    container_name: fx_ml_engine
+    ports:
+      - "8000:8000"
+    environment:
+      - BASE_CURRENCY=EUR
+      - MC_ITERATIONS=5000
+      - LOSS_THRESHOLD_PERCENT=20.0
+      - CONFIDENCE_LEVEL=0.95
+      - SUPPORTED_CURRENCIES=USD,GBP,INR,AED,JPY,CHF
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - DEBUG=true
+    volumes:
+      - ./ml-engine:/app
+    networks:
+      - fx_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Node.js Backend ─────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fx_backend
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+      - ML_ENGINE_URL=http://ml-engine:8000
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_IN=7d
+      - FX_API_BASE=https://api.frankfurter.app
+      - CORS_ORIGIN=http://localhost:5173
+      - SUPPORTED_CURRENCIES=USD,GBP,INR,AED,JPY,CHF
+      - BASE_CURRENCY=EUR
+    depends_on:
+      ml-engine:
+        condition: service_healthy
+    networks:
+      - fx_network
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  # ── React Frontend (dev) ────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: fx_frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:4000
+      - VITE_SOCKET_URL=http://localhost:4000
+    depends_on:
+      - backend
+    networks:
+      - fx_network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+networks:
+  fx_network:
+    driver: bridge

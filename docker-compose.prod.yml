@@ -1,0 +1,57 @@
+version: '3.9'
+
+services:
+  # ── Python ML Engine ────────────────────────────────────
+  ml-engine:
+    build:
+      context: ./ml-engine
+      dockerfile: Dockerfile
+    container_name: fx_ml_engine
+    restart: always
+    environment:
+      - BASE_CURRENCY=EUR
+      - MC_ITERATIONS=5000
+      - LOSS_THRESHOLD_PERCENT=20.0
+      - CONFIDENCE_LEVEL=0.95
+      - SUPPORTED_CURRENCIES=USD,GBP,INR,AED,JPY,CHF
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - DEBUG=false
+    networks:
+      - fx_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Node.js Backend ─────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fx_backend
+    restart: always
+    ports:
+      - "4000:4000"
+      - "80:4000"
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - ML_ENGINE_URL=http://ml-engine:8000
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET:-supersecretjwtkey_production_2026}
+      - JWT_EXPIRES_IN=7d
+      - FX_API_BASE=https://api.frankfurter.app
+      - CORS_ORIGIN=*
+      - SUPPORTED_CURRENCIES=USD,GBP,INR,AED,JPY,CHF
+      - BASE_CURRENCY=EUR
+    depends_on:
+      ml-engine:
+        condition: service_healthy
+    networks:
+      - fx_network
+
+networks:
+  fx_network:
+    driver: bridge

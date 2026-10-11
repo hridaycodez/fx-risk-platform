@@ -1,0 +1,36 @@
+{
+  "company_name": "Acme Corp",
+  "base_currency": "EUR",
+  "exposures": [
+    {
+      "name": "US_Sales",
+      "exp_type": "revenue",
+      "amount": 500000,
+      "currency": "USD"
+    },
+    {
+      "name": "UK_Sales",
+      "exp_type": "revenue",
+      "amount": 200000,
+      "currency": "GBP"
+    },
+    {
+      "name": "EU_Operations",
+      "exp_type": "cost",
+      "amount": 300000,
+      "currency": "EUR"
+    },
+    {
+      "name": "JP_Components",
+      "exp_type": "cost",
+      "amount": 10000000,
+      "currency": "JPY"
+    },
+    {
+      "name": "CH_Licensing",
+      "exp_type": "cost",
+      "amount": 50000,
+      "currency": "CHF"
+    }
+  ]
+}

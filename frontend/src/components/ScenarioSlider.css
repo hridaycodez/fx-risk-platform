@@ -1,0 +1,130 @@
+.slider-panel {
+  background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.slider-title {
+  color: #f0f6fc;
+  font-size: 1.1rem;
+  margin: 0 0 4px 0;
+}
+
+.slider-subtitle {
+  color: #8b949e;
+  font-size: 0.8rem;
+  margin: 0 0 20px 0;
+}
+
+.slider-empty {
+  color: #484f58;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+.slider-row {
+  margin-bottom: 18px;
+}
+
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.slider-label {
+  color: #c9d1d9;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.slider-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #8b949e;
+  min-width: 60px;
+  text-align: right;
+}
+
+.slider-value.positive {
+  color: #3fb950;
+}
+
+.slider-value.negative {
+  color: #f85149;
+}
+
+.slider-track-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.slider-bound {
+  font-size: 0.7rem;
+  color: #484f58;
+  font-family: 'JetBrains Mono', monospace;
+  min-width: 40px;
+}
+
+.slider-input {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: #21262d;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #388bfd;
+  border: 2px solid #58a6ff;
+  cursor: grab;
+  transition: transform 0.15s ease;
+}
+
+.slider-input::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.slider-input::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  background: #58a6ff;
+}
+
+.slider-input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #388bfd;
+  border: 2px solid #58a6ff;
+  cursor: grab;
+}
+
+.slider-reset-btn {
+  margin-top: 16px;
+  padding: 8px 20px;
+  background: transparent;
+  border: 1px solid #30363d;
+  color: #8b949e;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.slider-reset-btn:hover {
+  border-color: #58a6ff;
+  color: #58a6ff;
+  background: rgba(56, 139, 253, 0.08);
+}
