@@ -63,14 +63,16 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => console.error('❌ MongoDB connection error:', err.message));
 
 // ── Health Check ─────────────────────────────────────────────────
-app.get('/health', (req, res) => {
+const healthHandler = (req, res) => {
   res.json({
     status: 'ok',
     service: 'FX Risk Platform - Node.js Backend',
     timestamp: new Date().toISOString(),
     currencies: process.env.SUPPORTED_CURRENCIES?.split(',') || [],
   });
-});
+};
+app.get('/health', healthHandler);
+app.get('/api/health', healthHandler);
 
 // ── API Routes ───────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
