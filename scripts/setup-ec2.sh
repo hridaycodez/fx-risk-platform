@@ -3,12 +3,13 @@
 # FX Risk Platform - EC2 Bootstrap & Setup Script (Ubuntu 22.04)
 # ==============================================================================
 set -e
+export DEBIAN_FRONTEND=noninteractive
 
 echo "=================================================="
 echo "🚀 1. Updating System Packages..."
 echo "=================================================="
-sudo apt-get update -y
-sudo apt-get upgrade -y
+sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
+sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
 
 echo "=================================================="
 echo "🐳 2. Installing Docker & Docker Compose..."
