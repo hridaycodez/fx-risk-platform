@@ -143,10 +143,18 @@ if os.path.isdir(_static_dir):
 
 # ── Root ──────────────────────────────────────────────────────────────
 
-@app.get("/", tags=["Root"], response_class=HTMLResponse)
-def root():
-    """Redirect to the dashboard UI."""
-    return RedirectResponse(url="/static/index.html", status_code=302)
+@app.get("/", tags=["Root"])
+def root(request: Request):
+    """Return API info for API clients, or redirect browsers to dashboard UI."""
+    accept = request.headers.get("accept", "")
+    if "text/html" in accept:
+        return RedirectResponse(url="/static/index.html", status_code=302)
+    return {
+        "name": "FX Risk Engine API",
+        "version": "0.1.0",
+        "status": "online",
+        "docs": "/docs",
+    }
 
 
 # ── CLI Entry Point ──────────────────────────────────────────────────
