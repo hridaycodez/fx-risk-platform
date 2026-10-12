@@ -125,13 +125,13 @@ async def general_exception_handler(
 
 # ── Register Routers ─────────────────────────────────────────────────
 
-app.include_router(exposures.router)
-app.include_router(scenarios.router)
-app.include_router(analytics.router)
-
 # Streaming Monte Carlo + live PnL for the MERN frontend
 from stream_router import router as stream_router
 app.include_router(stream_router)
+
+app.include_router(exposures.router)
+app.include_router(scenarios.router)
+app.include_router(analytics.router)
 
 
 # ── Static Files ─────────────────────────────────────────────────────

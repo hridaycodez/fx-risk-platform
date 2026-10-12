@@ -61,18 +61,31 @@ class PnLEngine:
         total_cost = 0.0
         breakdown: List[Dict[str, Any]] = []
 
+        # Detect quote convention (e.g. Frankfurter / ECB rates where EUR=1.00 and JPY>5, INR>5, USD>1.05)
+        is_indirect = any(
+            (ccy in ("JPY", "INR", "AED") and r > 2.0)
+            or (ccy == "USD" and r > 1.05 and rates.get("GBP", 1.0) < 0.95)
+            for ccy, r in rates.items()
+        )
+
         for exp in self.exposures:
             if exp.currency == self.base_currency:
                 rate = 1.0
+                amount_in_base = exp.amount
             else:
                 rate = rates.get(exp.currency)
-                if rate is None:
+                if rate is None or rate == 0:
                     logger.warning(
                         "No FX rate for '%s'; defaulting to 1.0", exp.currency
                     )
                     rate = 1.0
 
-            amount_in_base = exp.amount * rate
+                if is_indirect:
+                    # Foreign currency per 1 base unit (e.g. 1.08 USD per 1 EUR)
+                    amount_in_base = exp.amount / rate
+                else:
+                    # Base currency per 1 foreign unit (e.g. 0.92 EUR per 1 USD)
+                    amount_in_base = exp.amount * rate
 
             if exp.exp_type == "revenue":
                 total_revenue += amount_in_base
