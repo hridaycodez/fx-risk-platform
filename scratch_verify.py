@@ -137,9 +137,9 @@ def test_math_core():
     s_pos = next(s for s in sens if s["shock_percent"] == 0.10)
 
     assert s_zero["delta_profit"] == 0.0, "Zero shock must have zero delta profit"
-    assert s_pos["delta_profit"] > 0, "Revenue currency appreciation (+shock) must increase base profit"
-    assert s_neg["delta_profit"] < 0, "Revenue currency depreciation (-shock) must decrease base profit"
-    print(f"  [PASS] Sensitivity Delta Verified: +10% shock -> +{s_pos['delta_profit']} EUR | -10% shock -> {s_neg['delta_profit']} EUR")
+    assert s_pos["delta_profit"] < 0, "EUR/USD rate increase (+shock / weaker USD) decreases EUR revenue"
+    assert s_neg["delta_profit"] > 0, "EUR/USD rate decrease (-shock / stronger USD) increases EUR revenue"
+    print(f"  [PASS] Sensitivity Delta Verified: +10% rate shock -> {s_pos['delta_profit']} EUR | -10% rate shock -> +{s_neg['delta_profit']} EUR")
 
     # 1.7 ML Classifier Sanity Check
     # High risk scenario: large downside probability
@@ -213,7 +213,7 @@ def test_live_application_stack():
     ctx.verify_mode = ssl.CERT_NONE
     
     BASE_URL = "https://d2j2pqdgfue0v4.cloudfront.net"
-    EC2_URL = "http://3.27.149.207"
+    EC2_URL = "http://backend:4000" if os.path.exists("/app") else "http://3.27.149.207"
 
     # 3.1 CloudFront & EC2 Health Check (via /api/health reverse proxy)
     req = urllib.request.Request(f"{BASE_URL}/api/health")
