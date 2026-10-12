@@ -1,13 +1,16 @@
 # FX Risk Platform — Quantitative Risk & Portfolio Analytics Platform
 
-![Architecture](https://img.shields.io/badge/Architecture-Decoupled%20Cloud-blue?style=for-the-badge)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-CloudFront%20CDN-2ea44f?style=for-the-badge&logo=google-chrome&logoColor=white)](https://d2j2pqdgfue0v4.cloudfront.net)
 ![AWS](https://img.shields.io/badge/AWS-S3%20%7C%20CloudFront%20%7C%20EC2-orange?style=for-the-badge&logo=amazon-aws)
 ![Docker](https://img.shields.io/badge/Docker-Compose%20v2-2496ED?style=for-the-badge&logo=docker)
 ![Node.js](https://img.shields.io/badge/Node.js-Express%20%7C%20Socket.io-339933?style=for-the-badge&logo=node.js)
-![Python](https://img.shields.io/badge/Python-FastAPI%20%7C%20NumPy%20%7C%20SciPy-3776AB?style=for-the-badge&logo=python)
-![React](https://img.shields.io/badge/Frontend-React%2018%20%7C%20Vite%20%7C%20Recharts-61DAFB?style=for-the-badge&logo=react)
+![Python](https://img.shields.io/badge/Python-FastAPI%20%7C%20NumPy%20%7C%20Scikit--Learn-3776AB?style=for-the-badge&logo=python)
+![React](https://img.shields.io/badge/Frontend-React%2018%20%7C%20Vite-61DAFB?style=for-the-badge&logo=react)
 
-An enterprise-grade Foreign Exchange (FX) Quantitative Risk Platform capable of computing real-time Value at Risk (VaR), Conditional Value at Risk (CVaR / Expected Shortfall), Greeks sensitivities (Delta, Gamma, Vega, Theta, Rho), and streaming live Monte Carlo simulations across multi-currency portfolios.
+> **Live Production Deployment**: 🌐 [https://d2j2pqdgfue0v4.cloudfront.net](https://d2j2pqdgfue0v4.cloudfront.net)  
+> **API Gateway & Microservices (AWS EC2)**: ⚡ [http://3.27.149.207/health](http://3.27.149.207/health)
+
+An enterprise-grade Foreign Exchange (FX) Quantitative Risk Platform capable of computing real-time Value at Risk (VaR), Conditional Value at Risk (CVaR / Expected Shortfall), Greeks sensitivities, and streaming live Monte Carlo simulations (5,000+ paths) across multi-currency portfolios.
 
 ---
 
@@ -80,7 +83,7 @@ An enterprise-grade Foreign Exchange (FX) Quantitative Risk Platform capable of 
 ### Running with Docker Compose (Recommended)
 ```bash
 # Clone the repository
-git clone https://github.com/<YOUR_USERNAME>/fx-risk-platform.git
+git clone https://github.com/hridaycodez/fx-risk-platform.git
 cd fx-risk-platform
 
 # Launch all microservices
