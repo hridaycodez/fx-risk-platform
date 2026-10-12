@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_REGION: ap-south-1   # Mumbai — closest to India
+  AWS_REGION: ap-southeast-2   # Region where your EC2 and S3 bucket were created
   S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
 
 jobs:
@@ -58,8 +58,8 @@ jobs:
           script: |
             cd /home/${{ secrets.EC2_USER }}/fx-risk-platform
             git pull origin main
-            docker compose -f docker-compose.prod.yml down || docker-compose -f docker-compose.prod.yml down
-            docker compose -f docker-compose.prod.yml up -d --build || docker-compose -f docker-compose.prod.yml up -d --build
+            sudo docker compose -f docker-compose.prod.yml down || true
+            sudo docker compose -f docker-compose.prod.yml up -d --build
             echo "✅ Backend deployed successfully"
 
   # ── Deploy Frontend to S3 + CloudFront ────────────────────────────
