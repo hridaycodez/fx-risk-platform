@@ -12,11 +12,11 @@ Node.js backend consumes this stream and forwards chunks via Socket.io to React.
 
 import json
 import logging
-from typing import List, Optional
+from typing import List, Optional, Any
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 import config
 from montecarlo_stream import run_correlated_monte_carlo
@@ -30,10 +30,20 @@ router = APIRouter(tags=["Streaming Simulation"])
 # ── Pydantic Schemas ──────────────────────────────────────────────────────────
 
 class ExposureItem(BaseModel):
-    name: str
-    exp_type: str = Field(..., pattern="^(revenue|cost)$")
+    name: str = "Exposure"
+    exp_type: str = Field(default="revenue", pattern="^(revenue|cost)$")
     amount: float = Field(..., gt=0)
     currency: str = Field(..., min_length=3, max_length=3)
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_fields(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "expType" in data and "exp_type" not in data:
+                data["exp_type"] = data["expType"]
+            if not data.get("name"):
+                data["name"] = f"{data.get('currency', 'FX')}_{data.get('exp_type', 'exp')}"
+        return data
 
 
 class MonteCarloStreamRequest(BaseModel):

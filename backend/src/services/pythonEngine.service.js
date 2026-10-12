@@ -2,11 +2,26 @@ const axios = require('axios');
 
 const ML_ENGINE_URL = process.env.ML_ENGINE_URL || 'http://localhost:8000';
 
+function formatExposures(exposures) {
+  if (!Array.isArray(exposures)) return [];
+  return exposures.map((exp, idx) => ({
+    name: exp.name || `${exp.currency || 'FX'}_exposure_${idx + 1}`,
+    exp_type: exp.exp_type || exp.expType || 'revenue',
+    expType: exp.expType || exp.exp_type || 'revenue',
+    amount: Number(exp.amount) || 0,
+    currency: (exp.currency || 'EUR').toUpperCase(),
+  }));
+}
+
 /**
  * Calls the Python ML Engine to run a full deterministic P&L analysis.
  */
 async function runPnL(payload) {
-  const response = await axios.post(`${ML_ENGINE_URL}/run_pnl`, payload, { timeout: 15000 });
+  const formattedPayload = {
+    ...payload,
+    exposures: formatExposures(payload.exposures),
+  };
+  const response = await axios.post(`${ML_ENGINE_URL}/run_pnl`, formattedPayload, { timeout: 15000 });
   return response.data;
 }
 
@@ -14,7 +29,11 @@ async function runPnL(payload) {
  * Calls the Python ML Engine to run sensitivity analysis (tornado chart data).
  */
 async function runSensitivity(payload) {
-  const response = await axios.post(`${ML_ENGINE_URL}/run_sensitivity`, payload, { timeout: 15000 });
+  const formattedPayload = {
+    ...payload,
+    exposures: formatExposures(payload.exposures),
+  };
+  const response = await axios.post(`${ML_ENGINE_URL}/run_sensitivity`, formattedPayload, { timeout: 15000 });
   return response.data;
 }
 
@@ -36,9 +55,13 @@ async function getMLPrediction(payload) {
 function streamMonteCarlo(payload, onChunk, onComplete) {
   return new Promise(async (resolve, reject) => {
     try {
+      const formattedPayload = {
+        ...payload,
+        exposures: formatExposures(payload.exposures),
+      };
       const response = await axios.post(
         `${ML_ENGINE_URL}/run_montecarlo_stream`,
-        payload,
+        formattedPayload,
         {
           responseType: 'stream',
           timeout: 60000,

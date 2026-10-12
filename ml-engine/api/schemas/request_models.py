@@ -6,17 +6,27 @@ Pydantic v2 models for request validation and response serialization.
 """
 
 from typing import Dict, List, Optional, Any
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 # ── Exposure Schemas ──────────────────────────────────────────────────
 
 class ExposureInput(BaseModel):
     """Schema for a single FX exposure."""
-    name: str = Field(..., min_length=1, description="Exposure identifier")
-    exp_type: str = Field(..., description="'revenue' or 'cost'")
+    name: str = Field(default="Exposure", description="Exposure identifier")
+    exp_type: str = Field(default="revenue", description="'revenue' or 'cost'")
     amount: float = Field(..., gt=0, description="Notional amount (positive)")
     currency: str = Field(..., min_length=3, max_length=3, description="ISO 4217 code")
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_fields(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "expType" in data and "exp_type" not in data:
+                data["exp_type"] = data["expType"]
+            if not data.get("name"):
+                data["name"] = f"{data.get('currency', 'FX')}_{data.get('exp_type', 'exp')}"
+        return data
 
     @field_validator("exp_type")
     @classmethod

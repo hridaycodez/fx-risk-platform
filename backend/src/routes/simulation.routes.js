@@ -22,7 +22,12 @@ router.post('/pnl', protect, async (req, res, next) => {
       portfolioId,
       type: 'pnl',
       params: { baseCurrency, exposures },
-      metrics: result.metrics,
+      metrics: {
+        meanProfit: result.profit,
+        p5Profit: result.profit,
+        p95Profit: result.profit,
+        ...(result.metrics || {}),
+      },
       ratesSnapshot: rates,
     });
 
@@ -65,7 +70,7 @@ router.get('/history', protect, async (req, res, next) => {
       .skip((parseInt(page) - 1) * parseInt(limit));
 
     const total = await SimulationResult.countDocuments(filter);
-    res.json({ total, page: parseInt(page), results });
+    res.json({ total, count: total, page: parseInt(page), results });
   } catch (err) {
     next(err);
   }
