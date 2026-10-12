@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { io } from 'socket.io-client';
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:4000';
+const rawSocketUrl = import.meta.env.VITE_SOCKET_URL;
+const SOCKET_URL = rawSocketUrl || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:4000');
 
 /**
  * Custom React hook for Socket.io connection.
